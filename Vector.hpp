@@ -17,16 +17,30 @@ private:
 public:
   Vector() : first_obj(nullptr), last_obj(nullptr){}
   Vector(unsigned int arg);
-  //  ~Vector();
+  ~Vector();
   bool empty();
+  unsigned int size();
 };
 
+template<class T>
+unsigned int Vector<T>::Vector::size(){
+  unsigned int count = 0;
+  entity<T>* temp = first_obj;
+  while(temp != nullptr){
+    temp = temp->next_entity;
+    count++;
+  }
+  return count;
+}
+
+  
 
 //smart pointer są w std, a program ma byc niezależny 
 template<class T>
 Vector<T>::Vector(unsigned int arg){
+
   entity<T> *temp;
-  if(empty()&&arg!=0){
+  if(arg!=0){
     last_obj=first_obj = new entity<T>();
     for(int i=1;i<arg;i++){
       last_obj->next_entity = new entity<T>();
@@ -35,14 +49,7 @@ Vector<T>::Vector(unsigned int arg){
       last_obj->previous_entity = temp;
     }
   }
-  else{
-    for(int i=0;i<arg;i++){
-      last_obj->next_entity = new entity<T>();
-      temp = last_obj;
-      last_obj = last_obj->next_entity;
-      last_obj->previous_entity = temp;
-    }
-  }
+ 
 }
 
 
@@ -54,6 +61,7 @@ bool Vector<T>::empty(){
 }
 template<class T>
 Vector<T>::~Vector(){
+
   entity<T> *temp;
   while(last_obj!=nullptr){
     temp = last_obj->previous_entity;

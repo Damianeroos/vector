@@ -19,23 +19,22 @@ int main() {
 	assert(f.empty());
 	assert(d.empty());
 	assert(s.empty());
-
-	 
+ 
 
   }
 
   // {
   //   Vector<int> a = {1, 2, 3};
-  //   assert(a.size() == 3);
+  //  assert(a.size() == 3);
 
-  //   Vector<int> copy = a;
+  //  Vector<int> copy = a;
   //   assert(a.size() == 3);
   //   assert(copy.size() == 3);
   // }
 
   // {
-  //   Vector<int> a(3);
-  //   assert(a.size() == 3);
+     Vector<int> a(3);
+     assert(a.size() == 3);
 
   //   assert(a[0] == 0);
   //   assert(a[1] == 0);

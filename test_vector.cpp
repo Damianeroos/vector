@@ -24,8 +24,8 @@ int main() {
   }
 
   // {
-  //   Vector<int> a = {1, 2, 3};
-  //  assert(a.size() == 3);
+     Vector<int> a = {1, 2, 3};
+     //  assert(a.size() == 3);
 
   //  Vector<int> copy = a;
   //   assert(a.size() == 3);
@@ -33,8 +33,8 @@ int main() {
   // }
 
   // {
-     Vector<int> a(3);
-     assert(a.size() == 3);
+    // Vector<int> a(3);
+    //   assert(a.size() == 3);
 
   //   assert(a[0] == 0);
   //   assert(a[1] == 0);

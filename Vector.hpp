@@ -3,10 +3,13 @@
 
 template<class T>
 struct entity{
-  T obj;
+  T value;
   entity *next_entity;
   entity *previous_entity;
   entity() : next_entity(nullptr), previous_entity(nullptr){}
+  entity(entity<T>*arg,T arg2) : next_entity(nullptr),
+				 previous_entity(arg),
+				 value(arg2){}
 };
 
 template<class T>
@@ -16,11 +19,29 @@ private:
   entity<T> * last_obj;
 public:
   Vector() : first_obj(nullptr), last_obj(nullptr){}
+  Vector(std::initializer_list<T>);
   Vector(unsigned int arg);
   ~Vector();
   bool empty();
   unsigned int size();
+  void push_back(T);
 };
+template<class T>
+void Vector<T>::push_back(T value){
+  entity<T> *temp;
+  if(empty()){
+    first_obj=last_obj = new entity<T>();
+    last_obj->value = value;
+  }
+  else{
+    last_obj=last_obj->next_entity = new entity<T>(last_obj,value);
+  }
+}
+template<class T>
+Vector<T>::Vector(std::initializer_list<T> lists){
+  for(auto i : lists)
+    std::cout<<i<<std::endl;
+}
 
 template<class T>
 unsigned int Vector<T>::Vector::size(){

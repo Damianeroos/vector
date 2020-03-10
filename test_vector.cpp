@@ -15,10 +15,10 @@ int main() {
 	Vector<double> d;
 	Vector<std::string> s;
 
-	// assert(i.empty());
-	// assert(f.empty());
-	// assert(d.empty());
-	// assert(s.empty());
+	assert(i.empty());
+	assert(f.empty());
+	assert(d.empty());
+	assert(s.empty());
   }
 
   // {

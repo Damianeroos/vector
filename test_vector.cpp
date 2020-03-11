@@ -23,34 +23,34 @@ int main() {
 
   // }
 
-  {
-    Vector<int> a = {1, 2, 3};
-    assert(a.size() == 3);
-    Vector<int> copy = a;
-    assert(a.size() == 3);
-    assert(copy.size() == 3);
-  }
-
   // {
-     // Vector<int> a(3);
-     // assert(a.size() == 3);
-
-  //   assert(a[0] == 0);
-  //   assert(a[1] == 0);
-  //   assert(a[2] == 0);
-
-  //   assert(a.at(0) == 0);
-  //   assert(a.at(1) == 0);
-  //   assert(a.at(2) == 0);
-
-  //   bool thrown = false;
-  //   try {
-  //     a.at(3);
-  //   } catch (std::out_of_range&) {
-  //     thrown = true;
-  //   }
-  //   assert(thrown);
+  //   Vector<int> a = {1, 2, 3};
+  //   assert(a.size() == 3);
+  //   Vector<int> copy = a;
+  //   assert(a.size() == 3);
+  //   assert(copy.size() == 3);
   // }
+
+  {
+  Vector<int> a(3);
+  assert(a.size() == 3);
+
+  assert(a[0] == 0);
+  assert(a[1] == 0);
+  assert(a[2] == 0);
+
+  assert(a.at(0) == 0);
+  assert(a.at(1) == 0);
+  assert(a.at(2) == 0);
+
+    bool thrown = false;
+    try {
+      a.at(3);
+    } catch (std::out_of_range&) {
+      thrown = true;
+    }
+    assert(thrown);
+  }
 
   // {
   // 	Vector<int> a = {1, 2, 3};

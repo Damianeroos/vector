@@ -9,28 +9,27 @@
 //using Vector = std::vector<T>;
 
 int main() {
-  {
-	Vector<int> i;
-	Vector<float> f;
-	Vector<double> d;
-	Vector<std::string> s;
+  // {
+  // 	Vector<int> i;
+  // 	Vector<float> f;
+  // 	Vector<double> d;
+  // 	Vector<std::string> s;
 
-	assert(i.empty());
-	assert(f.empty());
-	assert(d.empty());
-	assert(s.empty());
+  // 	assert(i.empty());
+  // 	assert(f.empty());
+  // 	assert(d.empty());
+  // 	assert(s.empty());
  
 
-  }
+  // }
 
-  // {
+  {
     Vector<int> a = {1, 2, 3};
     assert(a.size() == 3);
-
-  //  Vector<int> copy = a;
-  //   assert(a.size() == 3);
-  //   assert(copy.size() == 3);
-  // }
+    Vector<int> copy = a;
+    assert(a.size() == 3);
+    assert(copy.size() == 3);
+  }
 
   // {
      // Vector<int> a(3);

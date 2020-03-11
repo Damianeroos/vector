@@ -25,13 +25,27 @@ public:
   const T& at(size_t) const;
   void push_back(T);
   void pop_back(void);
-  T& back(void){return m_entities[m_size-1];}
-  const T& back(void) const{return m_entities[m_size-1];}
-
+  T& back(void){return (*this)[m_size-1];}
+  const T& back(void) const{return (*this)[m_size-1];}
+  bool operator ==(const Vector<T> &) const;
+  bool operator !=(const Vector<T> &arg) const {return !(*this==arg);}
+  T& front(void){return (*this)[0];}
+  const T& front(void) const{return (*this)[0];}
   
-  
- 
 };
+
+
+template<class T>
+bool Vector<T>::operator ==(const Vector<T> &arg) const{
+  if(arg.size()!=m_size)
+    return false;
+
+  for(int i=0; i<m_size; i++){
+    if(m_entities[i]!=arg[i])
+      return false;
+  }
+  return true;
+}
 
 template<class T>
 void Vector<T>::pop_back(void){

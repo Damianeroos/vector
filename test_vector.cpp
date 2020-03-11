@@ -31,43 +31,43 @@ int main() {
   //   assert(copy.size() == 3);
   // }
 
-  {
-  Vector<int> a(3);
-  assert(a.size() == 3);
-
-  assert(a[0] == 0);
-  assert(a[1] == 0);
-  assert(a[2] == 0);
-
-  assert(a.at(0) == 0);
-  assert(a.at(1) == 0);
-  assert(a.at(2) == 0);
-
-    bool thrown = false;
-    try {
-      a.at(3);
-    } catch (std::out_of_range&) {
-      thrown = true;
-    }
-    assert(thrown);
-  }
-
   // {
-  // 	Vector<int> a = {1, 2, 3};
+  // Vector<int> a(3);
+  // assert(a.size() == 3);
 
-  // 	a.push_back(99);
-  // 	assert(a.size() == 4);
-  //   assert(a.back() == 99);
+  // assert(a[0] == 0);
+  // assert(a[1] == 0);
+  // assert(a[2] == 0);
 
-  //   a.back() = 100;
-  //   assert(a.back() == 100);
-  //   a.back()++;
-  //   assert(a.back() == 101);
+  // assert(a.at(0) == 0);
+  // assert(a.at(1) == 0);
+  // assert(a.at(2) == 0);
 
-  //   a.pop_back();
-  //   assert(a.size() == 3);
-  //   assert(a.back() == 3);
+  //   bool thrown = false;
+  //   try {
+  //     a.at(3);
+  //   } catch (std::out_of_range&) {
+  //     thrown = true;
+  //   }
+  //   assert(thrown);
   // }
+
+  {
+    Vector<int> a = {1, 2, 3};
+
+    a.push_back(99);
+    assert(a.size() == 4);
+    assert(a.back() == 99);
+
+    a.back() = 100;
+    assert(a.back() == 100);
+    a.back()++;
+    assert(a.back() == 101);
+
+    a.pop_back();
+    assert(a.size() == 3);
+    assert(a.back() == 3);
+  }
 
   // {
   // 	Vector<int> a = {100, 2, 3};

@@ -19,13 +19,53 @@ public:
   bool empty() {return !m_size;}
   size_t size()const {return m_size;}
   Vector<T>& operator= (const Vector<T>&);
-  T& operator[](size_t index);
-  const  T& operator[](size_t index) const;
-  T& at(size_t index);
-  const T& at(size_t index) const;
+  T& operator[](size_t);
+  const  T& operator[](size_t) const;
+  T& at(size_t);
+  const T& at(size_t) const;
+  void push_back(T);
+  void pop_back(void);
+  T& back(void){return m_entities[m_size-1];}
+  const T& back(void) const{return m_entities[m_size-1];}
+
+  
   
  
 };
+
+template<class T>
+void Vector<T>::pop_back(void){
+  if(m_size <= 1){
+    m_size = 0;
+    m_entities = nullptr;
+    return;
+  }
+  
+  std::unique_ptr<T[]> temp = std::make_unique<T[]>(m_size);
+  //mało wydajne, może powinienem użyć shared_ptr zamiast unique_ptr
+  for(int i=0;i<m_size;i++){ 
+    temp[i]=m_entities[i];
+  }
+  m_size--;
+  m_entities = std::make_unique<T[]>(m_size);
+  for(int i=0;i<m_size;i++){ 
+    m_entities[i]=temp[i];
+  }
+}
+  
+template<class T>
+void Vector<T>::push_back(T arg){
+  std::unique_ptr<T[]> temp = std::make_unique<T[]>(m_size);
+  for(int i=0;i<m_size;i++){ 
+    temp[i]=m_entities[i];
+  }
+  m_size++;
+  m_entities = std::make_unique<T[]>(m_size);
+  for(int i=0;i<m_size-1;i++){ 
+    m_entities[i]=temp[i];
+  }
+  m_entities[m_size-1]= arg;
+}
 
 template<class T>
 T& Vector<T>::operator[](size_t index){

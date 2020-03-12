@@ -32,6 +32,11 @@ public:
   bool operator!=(const Vector<T> &arg) const { return !(*this == arg); }
   Vector<T> &operator=(const Vector<T> &);
 
+  auto begin() { return &m_entities[0]; }
+  auto begin() const { return &m_entities[0]; }
+  auto end() { return &m_entities[m_size]; }
+  auto end() const { return &m_entities[m_size]; }
+
 private:
   std::unique_ptr<T[]> m_entities;
   std::size_t m_size;
@@ -53,10 +58,7 @@ template <class T> Vector<T>::Vector(std::initializer_list<T> list) {
   m_size = list.size();
   m_entities = std::make_unique<T[]>(m_real_size);
 
-  int i = 0;
-  for (auto it : list) {
-    m_entities[i++] = it;
-  }
+  std::copy(list.begin(), list.end(), begin());
 }
 
 template <class T> Vector<T>::Vector(std::size_t arg) {
@@ -69,11 +71,7 @@ template <class T> Vector<T>::Vector(std::size_t arg) {
   m_real_size = 1 << compute_pow(arg);
   m_size = arg;
   m_entities = std::make_unique<T[]>(m_real_size);
-  if (std::is_same<T, int>::value) {
-    for (int i = 0; i < m_size; i++) {
-      m_entities[i] = 0;
-    }
-  }
+  std::fill(begin(), end(), 0);
 }
 
 template <class T> T &Vector<T>::at(std::size_t index) {
@@ -121,10 +119,8 @@ template <class T> bool Vector<T>::operator==(const Vector<T> &arg) const {
   if (arg.size() != m_size)
     return false;
 
-  for (int i = 0; i < m_size; i++) {
-    if (m_entities[i] != arg[i])
-      return false;
-  }
+  if (!std::equal(begin(), end(), arg.begin(), arg.end()))
+    return false;
   return true;
 }
 
@@ -136,17 +132,14 @@ template <class T> Vector<T> &Vector<T>::operator=(const Vector<T> &arg) {
     return p;
   };
   m_size = arg.size();
-  m_real_size = compute_pow(arg.size());
+  m_real_size = 1 << compute_pow(arg.size());
 
   try {
     m_entities = std::make_unique<T[]>(m_real_size);
   } catch (std::bad_alloc &ba) {
-    std::cerr << "Unable to allocate memory\n";
+    std::cerr << "Unable to commit assignment\n";
     exit(1);
   }
-
-  for (int i = 0; i < arg.size(); i++) {
-    m_entities[i] = arg[i];
-  }
+  std::copy(arg.begin(), arg.end(), begin());
   return *this;
 }

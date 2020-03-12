@@ -10,19 +10,19 @@
 
 int main() {
 
-  {
-  	Vector<int> i;
-  	Vector<float> f;
-  	Vector<double> d;
-  	Vector<std::string> s;
+  // {
+  // 	Vector<int> i;
+  // 	Vector<float> f;
+  // 	Vector<double> d;
+  // 	Vector<std::string> s;
 
-  	assert(i.empty());
-  	assert(f.empty());
-  	assert(d.empty());
-  	assert(s.empty());
+  // 	assert(i.empty());
+  // 	assert(f.empty());
+  // 	assert(d.empty());
+  // 	assert(s.empty());
  
 
-  }
+  // }
 
   // {
   //   Vector<int> a = {1, 2, 3};
@@ -30,7 +30,7 @@ int main() {
   //   Vector<int> copy = a;
   //   assert(a.size() == 3);
   //   assert(copy.size() == 3);
-  //}
+  // }
 
   // {
   // Vector<int> a(3);
@@ -70,15 +70,15 @@ int main() {
   //   assert(a.back() == 3);
   // }
 
-  // {
-  //   Vector<int> a = {100, 2, 3,50};
-  // 	Vector<int> b = {1, 2, 3};
-  // 	Vector<int> c = {1, 2, 3};
-  // 	assert(a != b);
-  // 	assert(b == c);
+  {
+    Vector<int> a = {100, 2, 3,50};
+  	Vector<int> b = {1, 2, 3};
+  	Vector<int> c = {1, 2, 3};
+  	assert(a != b);
+  	assert(b == c);
 
-  // 	a = b;
-  // 	assert(a == b);
-  // 	assert(a.front() == 1 && b.front() == 1);
-  // }
+  	a = b;
+  	assert(a == b);
+  	assert(a.front() == 1 && b.front() == 1);
+  }
 }

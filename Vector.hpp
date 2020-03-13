@@ -8,12 +8,14 @@
 #include <type_traits>
 
 template <class T> class Vector {
-public: 
-  Vector() : m_size(0) {m_entities = std::make_unique<T[]>(4); m_real_size=4;}
+public:
+  Vector() : m_size(0) {
+    m_entities = std::make_unique<T[]>(4);
+    m_real_size = 4;
+  }
   Vector(const Vector<T> &arg) { *this = arg; }
   Vector(std::initializer_list<T>);
   Vector(std::size_t);
-
 
   bool empty() const { return !m_size; }
   std::size_t size() const { return m_size; }
@@ -37,7 +39,7 @@ public:
   auto end() { return &m_entities[m_size]; }
   auto end() const { return &m_entities[m_size]; }
 
-  size_t compute_pow(const size_t &size)const;
+  size_t compute_pow(const size_t &size) const;
 
 private:
   std::unique_ptr<T[]> m_entities;
@@ -56,7 +58,6 @@ template <class T> Vector<T>::Vector(std::initializer_list<T> list) {
   m_entities = std::move(temp_entities);
   m_real_size = temp_real_size;
   m_size = list.size();
- 
 }
 
 template <class T> Vector<T>::Vector(std::size_t arg) {
@@ -64,7 +65,6 @@ template <class T> Vector<T>::Vector(std::size_t arg) {
   m_size = arg;
   m_entities = std::make_unique<T[]>(m_real_size);
   std::fill(begin(), end(), T{});
-  
 }
 
 template <class T> T &Vector<T>::at(std::size_t index) {
@@ -80,13 +80,13 @@ template <class T> const T &Vector<T>::at(std::size_t index) const {
 }
 
 template <class T> void Vector<T>::push_back(const T &arg) {
- 
+
   if (m_real_size == m_size) {
-    std::size_t temp_real_size = m_real_size*2;
-    
+    std::size_t temp_real_size = m_real_size * 2;
+
     auto temp_entities = std::make_unique<T[]>(temp_real_size);
     std::copy(begin(), end(), &temp_entities[0]);
-    
+
     temp_entities[m_size] = arg;
     m_entities = std::move(temp_entities);
     ++m_size;
@@ -97,36 +97,32 @@ template <class T> void Vector<T>::push_back(const T &arg) {
   }
 }
 
-template <class T> void Vector<T>::pop_back() {
-  --m_size;
-}
+template <class T> void Vector<T>::pop_back() { --m_size; }
 
 template <class T> bool Vector<T>::operator==(const Vector<T> &arg) const {
   if (arg.size() != m_size)
     return false;
 
   return (std::equal(begin(), end(), arg.begin(), arg.end()));
-
 }
 
 template <class T> Vector<T> &Vector<T>::operator=(const Vector<T> &arg) {
-  size_t temp_real_size =  1 << compute_pow(arg.size());
-  
-  auto temp_entities = std::make_unique<T[]>(temp_real_size);  
+  size_t temp_real_size = 1 << compute_pow(arg.size());
+
+  auto temp_entities = std::make_unique<T[]>(temp_real_size);
   std::copy(arg.begin(), arg.end(), &temp_entities[0]);
-  
+
   m_entities = std::move(temp_entities);
   m_size = arg.size();
   m_real_size = temp_real_size;
-  
+
   return *this;
 }
 
-template<class T>
-size_t Vector<T>::compute_pow(const size_t &size)const{
-  int  p = 0;
+template <class T> size_t Vector<T>::compute_pow(const size_t &size) const {
+  int p = 0;
   int temp_size = static_cast<int>(size);
-    while (temp_size >= (1 << p))
-      ++p;
-    return p;
+  while (temp_size >= (1 << p))
+    ++p;
+  return p;
 }

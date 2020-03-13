@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <cstddef>
 #include <initializer_list>
-#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <type_traits>
@@ -50,16 +49,14 @@ template <class T> Vector<T>::Vector(std::initializer_list<T> list) {
   if (!list.size()) {
     return;
   }
-  size_t temp_real_size = 1 << compute_pow(list.size());
-
+  std::size_t temp_real_size = 1 << compute_pow(list.size());
   auto temp_entities = std::make_unique<T[]>(temp_real_size);
-  if(temp_entities != nullptr){
-    m_real_size = temp_real_size;
-    m_size = list.size();
-    m_entities = std::move(temp_entities);
-  }
-  std::copy(list.begin(), list.end(), back());
-  //  https://stackoverflow.com/questions/29016785/c-stls-copy-exception-safety
+  std::copy(list.begin(), list.end(), &temp_entities[0]);
+
+  m_entities = std::move(temp_entities);
+  m_real_size = temp_real_size;
+  m_size = list.size();
+ 
 }
 
 template <class T> Vector<T>::Vector(std::size_t arg) {
@@ -67,6 +64,7 @@ template <class T> Vector<T>::Vector(std::size_t arg) {
   m_size = arg;
   m_entities = std::make_unique<T[]>(m_real_size);
   std::fill(begin(), end(), T{});
+  
 }
 
 template <class T> T &Vector<T>::at(std::size_t index) {
@@ -83,15 +81,16 @@ template <class T> const T &Vector<T>::at(std::size_t index) const {
 
 template <class T> void Vector<T>::push_back(const T &arg) {
  
-    if (m_real_size == m_size) {
-    m_real_size *= 2;
-    std::unique_ptr<T[]> temp = std::make_unique<T[]>(m_real_size); //uzywać atuo
-    for (int i = 0; i < m_size; i++) {
-      temp[i] = m_entities[i]; // std::move alghoritm
-    }
-    temp[m_size] = arg;
-    m_entities = std::move(temp);
-    m_size++;
+  if (m_real_size == m_size) {
+    std::size_t temp_real_size = m_real_size*2;
+    
+    auto temp_entities = std::make_unique<T[]>(temp_real_size);
+    std::copy(begin(), end(), &temp_entities[0]);
+    
+    temp_entities[m_size] = arg;
+    m_entities = std::move(temp_entities);
+    ++m_size;
+    m_real_size = temp_real_size;
   } else {
     m_entities[m_size] = arg;
     ++m_size;
@@ -111,28 +110,23 @@ template <class T> bool Vector<T>::operator==(const Vector<T> &arg) const {
 }
 
 template <class T> Vector<T> &Vector<T>::operator=(const Vector<T> &arg) {
-
+  size_t temp_real_size =  1 << compute_pow(arg.size());
+  
+  auto temp_entities = std::make_unique<T[]>(temp_real_size);  
+  std::copy(arg.begin(), arg.end(), &temp_entities[0]);
+  
+  m_entities = std::move(temp_entities);
   m_size = arg.size();
-  m_real_size = 1 << compute_pow(arg.size());
-
-  try {
-    m_entities = std::make_unique<T[]>(m_real_size); //w vektorze nie powinismy lapac wyjatkow
-  } catch (std::bad_alloc &ba) {
-    std::cerr << "Unable to commit assignment\n";
-    exit(1);
-  }
-  std::copy(arg.begin(), arg.end(), begin());
+  m_real_size = temp_real_size;
+  
   return *this;
 }
 
 template<class T>
 size_t Vector<T>::compute_pow(const size_t &size)const{
-  unsigned int  p = 0;
-    while (size >= (1 << p))
+  int  p = 0;
+  int temp_size = static_cast<int>(size);
+    while (temp_size >= (1 << p))
       ++p;
     return p;
 }
-//wyjątek poleci to wektor bedzie taki jakby funcja nie była wywołana, wktor ma byc bezpieczny
-//operator przypisania
-//push_back
-//probleu nie maja konstrukotry bo element nie zostanie utworzony

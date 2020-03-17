@@ -134,8 +134,6 @@ Vector<T> &Vector<T>::operator=(Vector<T> &&arg) {
   m_entities = std::move(arg.m_entities);
   m_size = arg.m_size;
   m_real_size = arg.m_real_size;
-  arg.m_size = 0;
-  arg.m_real_size = 0;
 
   return *this;
 }

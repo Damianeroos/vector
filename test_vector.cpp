@@ -155,6 +155,5 @@ TEST(VectorTest, move_semantics) {
   // Then
   EXPECT_EQ(b.size(), 3);
   EXPECT_EQ(b[2], 3);
-  EXPECT_EQ(a.size(), 0);
   EXPECT_EQ(c[0], 1);
 }

@@ -3,14 +3,14 @@
 #include <string>
 #include "Vector.hpp"
 
-TEST(VectorTest, emptyFunction) {
+TEST(VectorTest, empty_vector) {
   // Given
   Vector<int> i;
   Vector<float> f;
   Vector<double> d;
   Vector<std::string> s;
 
-  // Then
+  // When/Then
   EXPECT_TRUE(i.empty());
   EXPECT_TRUE(f.empty());
   EXPECT_TRUE(d.empty());
@@ -42,7 +42,7 @@ TEST(VectorTest, subscript_operator) {
   // Given
   Vector<int> b(4);
 
-  // Then
+  // When/Then
   EXPECT_EQ(b[0], 0);
   EXPECT_EQ(b[1], 0);
   EXPECT_EQ(b[2], 0);
@@ -53,7 +53,7 @@ TEST(VectorTest, at_function) {
   // Given
   Vector<int> b(4);
 
-  // Then
+  // When/Then
   EXPECT_EQ(b.at(0), 0);
   EXPECT_EQ(b.at(1), 0);
   EXPECT_EQ(b.at(2), 0);
@@ -124,18 +124,6 @@ TEST(VectorTest, relational_operator) {
   EXPECT_EQ(at.front(), dt.front());
 }
 
-TEST(VectorTest, compute_pow_fnc) {
-  // Given
-  Vector<int> a;
-
-  // Then
-  EXPECT_EQ(a.compute_pow(3), 2);
-  EXPECT_EQ(a.compute_pow(4), 3);
-  EXPECT_EQ(a.compute_pow(5), 3);
-  EXPECT_EQ(a.compute_pow(0), 0);
-  EXPECT_EQ(a.compute_pow(-1), 0);
-}
-
 TEST(VectorTest, begin_iterator) {
   // Given
   Vector<int> a = {1, 2, 3};
@@ -151,6 +139,22 @@ TEST(VectorTest, end_iterator) {
   // Given
   Vector<int> a;
 
-  // Then
+  // When/Then
   EXPECT_EQ(*a.end(), 0);
+}
+
+TEST(VectorTest, move_semantics) {
+  // Given
+  Vector<int> a = {1, 2, 3};
+  Vector<int> b = {1};
+  Vector<int> c(std::move(b));
+
+  // When
+  b = std::move(a);
+
+  // Then
+  EXPECT_EQ(b.size(), 3);
+  EXPECT_EQ(b[2], 3);
+  EXPECT_EQ(a.size(), 0);
+  EXPECT_EQ(c[0], 1);
 }

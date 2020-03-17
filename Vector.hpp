@@ -15,6 +15,7 @@ class Vector {
     m_real_size = 4;
   }
   Vector(const Vector<T> &arg) { *this = arg; }
+  Vector(Vector<T> &&arg) { *this = std::move(arg); }
   Vector(std::initializer_list<T>);
   Vector(std::size_t);
 
@@ -34,15 +35,15 @@ class Vector {
   bool operator==(const Vector<T> &) const;
   bool operator!=(const Vector<T> &arg) const { return !(*this == arg); }
   Vector<T> &operator=(const Vector<T> &);
+  Vector<T> &operator=(Vector<T> &&);
 
   T *begin() { return &m_entities[0]; }
   T *begin() const { return &m_entities[0]; }
   T *end() { return &m_entities[m_size]; }
   T *end() const { return &m_entities[m_size]; }
 
-  size_t compute_pow(const size_t &size) const;
-
  private:
+  size_t compute_pow(const size_t &size) const;
   std::unique_ptr<T[]> m_entities;
   std::size_t m_size;
   std::size_t m_real_size;
@@ -112,6 +113,8 @@ bool Vector<T>::operator==(const Vector<T> &arg) const {
 
 template <class T>
 Vector<T> &Vector<T>::operator=(const Vector<T> &arg) {
+  if (&arg == this) return *this;
+
   size_t temp_real_size = 1 << compute_pow(arg.size());
 
   auto temp_entities = std::make_unique<T[]>(temp_real_size);
@@ -120,6 +123,19 @@ Vector<T> &Vector<T>::operator=(const Vector<T> &arg) {
   m_entities = std::move(temp_entities);
   m_size = arg.size();
   m_real_size = temp_real_size;
+
+  return *this;
+}
+
+template <class T>
+Vector<T> &Vector<T>::operator=(Vector<T> &&arg) {
+  if (&arg == this) return *this;
+
+  m_entities = std::move(arg.m_entities);
+  m_size = arg.m_size;
+  m_real_size = arg.m_real_size;
+  arg.m_size = 0;
+  arg.m_real_size = 0;
 
   return *this;
 }

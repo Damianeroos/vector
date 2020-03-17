@@ -15,7 +15,7 @@ class Vector {
     m_real_size = 4;
   }
   Vector(const Vector<T> &arg) { *this = arg; }
-  Vector(Vector<T> &&arg) { *this = std::move(arg); }
+  Vector(Vector<T> &&arg) noexcept { *this = std::move(arg); }
   Vector(std::initializer_list<T>);
   Vector(std::size_t);
 
@@ -35,7 +35,7 @@ class Vector {
   bool operator==(const Vector<T> &) const;
   bool operator!=(const Vector<T> &arg) const { return !(*this == arg); }
   Vector<T> &operator=(const Vector<T> &);
-  Vector<T> &operator=(Vector<T> &&);
+  Vector<T> &operator=(Vector<T> &&) noexcept;
 
   T *begin() { return &m_entities[0]; }
   T *begin() const { return &m_entities[0]; }
@@ -128,7 +128,7 @@ Vector<T> &Vector<T>::operator=(const Vector<T> &arg) {
 }
 
 template <class T>
-Vector<T> &Vector<T>::operator=(Vector<T> &&arg) {
+Vector<T> &Vector<T>::operator=(Vector<T> &&arg) noexcept {
   if (&arg == this) return *this;
 
   m_entities = std::move(arg.m_entities);

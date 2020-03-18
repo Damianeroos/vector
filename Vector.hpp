@@ -14,17 +14,17 @@ class Vector {
     m_entities = std::make_unique<T[]>(4);
     m_real_size = 4;
   }
-  Vector(const Vector<T> &arg) { *this = arg; }
-  Vector(Vector<T> &&arg) noexcept { *this = std::move(arg); }
+  Vector(const Vector<T> &arg);
+  Vector(Vector<T> &&arg) noexcept { swap(arg); }
   Vector(std::initializer_list<T>);
   Vector(std::size_t);
 
-  bool empty() const { return !m_size; }
-  std::size_t size() const { return m_size; }
+  bool empty() const noexcept { return !m_size; }
+  std::size_t size() const noexcept { return m_size; }
   T &at(std::size_t);
   const T &at(std::size_t) const;
   void push_back(const T &);
-  void pop_back();
+  void pop_back() noexcept { --m_size; }
   T &back() { return (*this)[m_size - 1]; }
   const T &back() const { return (*this)[m_size - 1]; }
   T &front() { return (*this)[0]; }
@@ -43,16 +43,24 @@ class Vector {
   T *end() { return &m_entities[m_size]; }
   T *end() const { return &m_entities[m_size]; }
 
-  friend void swap(Vector<T> &larg, Vector<T> &rarg) noexcept {
-    larg.swap(rarg);
-  }
-
  private:
   size_t compute_pow(const size_t &size) const;
   std::unique_ptr<T[]> m_entities;
   std::size_t m_size;
   std::size_t m_real_size;
 };
+
+template <class T>
+Vector<T>::Vector(const Vector<T> &arg) {
+  size_t temp_real_size = 1 << compute_pow(arg.size());
+
+  auto temp_entities = std::make_unique<T[]>(temp_real_size);
+  std::copy(arg.begin(), arg.end(), &temp_entities[0]);
+
+  m_entities = std::move(temp_entities);
+  m_size = arg.size();
+  m_real_size = temp_real_size;
+}
 
 template <class T>
 Vector<T>::Vector(std::initializer_list<T> list) {
@@ -92,10 +100,8 @@ void Vector<T>::push_back(const T &arg) {
     std::size_t temp_real_size = m_real_size * 2;
 
     auto temp_entities = std::make_unique<T[]>(temp_real_size);
-    std::copy(begin(), end(), &temp_entities[0]);
-
     temp_entities[m_size] = arg;
-    m_entities = std::move(temp_entities);
+    m_entities = std::move_if_noexcept(temp_entities);
     ++m_size;
     m_real_size = temp_real_size;
   } else {
@@ -105,15 +111,19 @@ void Vector<T>::push_back(const T &arg) {
 }
 
 template <class T>
-void Vector<T>::pop_back() {
-  --m_size;
-}
-
-template <class T>
 void Vector<T>::swap(Vector<T> &arg) noexcept {
-  auto temp(std::move(arg));
-  arg = std::move(*this);
-  *this = std::move(temp);
+  Vector<T> temp;
+  temp.m_entities = std::move(arg.m_entities);
+  temp.m_size = std::move(arg.m_size);
+  temp.m_real_size = std::move(arg.m_real_size);
+
+  arg.m_entities = std::move(m_entities);
+  arg.m_size = std::move(m_size);
+  arg.m_real_size = std::move(m_real_size);
+
+  m_entities = std::move(temp.m_entities);
+  m_size = std::move(temp.m_size);
+  m_real_size = std::move(temp.m_real_size);
 }
 
 template <class T>
@@ -127,14 +137,8 @@ template <class T>
 Vector<T> &Vector<T>::operator=(const Vector<T> &arg) {
   if (&arg == this) return *this;
 
-  size_t temp_real_size = 1 << compute_pow(arg.size());
-
-  auto temp_entities = std::make_unique<T[]>(temp_real_size);
-  std::copy(arg.begin(), arg.end(), &temp_entities[0]);
-
-  m_entities = std::move(temp_entities);
-  m_size = arg.size();
-  m_real_size = temp_real_size;
+  auto copy(arg);
+  swap(copy);
 
   return *this;
 }
@@ -143,9 +147,7 @@ template <class T>
 Vector<T> &Vector<T>::operator=(Vector<T> &&arg) noexcept {
   if (&arg == this) return *this;
 
-  m_entities = std::move(arg.m_entities);
-  m_size = std::move(arg.m_size);
-  m_real_size = std::move(arg.m_real_size);
+  swap(arg);
 
   return *this;
 }
@@ -156,4 +158,9 @@ size_t Vector<T>::compute_pow(const size_t &size) const {
   int temp_size = static_cast<int>(size);
   while (temp_size >= (1 << p)) ++p;
   return p;
+}
+
+template <class T>
+void swap(Vector<T> &larg, Vector<T> &rarg) noexcept {
+  larg.swap(rarg);
 }

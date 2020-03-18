@@ -157,3 +157,33 @@ TEST(VectorTest, move_semantics) {
   EXPECT_EQ(b[2], 3);
   EXPECT_EQ(c[0], 1);
 }
+
+TEST(VectorTest, swap_class_method) {
+  // Given
+  Vector<int> a = {1, 2, 3};
+  Vector<int> b = {6, 6, 6, 6};
+  Vector<int> c(a);
+
+  // When
+  b.swap(a);
+
+  // Then
+  EXPECT_EQ(c, b);
+  EXPECT_EQ(a.size(), 4);
+  EXPECT_EQ(a[3], 6);
+}
+
+TEST(VectorTest, swap_fnc) {
+  // Given
+  Vector<int> a = {1, 2, 3};
+  Vector<int> b = {6, 6, 6, 6};
+  Vector<int> c(a);
+
+  // When
+  swap(a, b);
+
+  // Then
+  EXPECT_EQ(c, b);
+  EXPECT_EQ(a.size(), 4);
+  EXPECT_EQ(a[3], 6);
+}

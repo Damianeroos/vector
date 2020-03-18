@@ -29,6 +29,7 @@ class Vector {
   const T &back() const { return (*this)[m_size - 1]; }
   T &front() { return (*this)[0]; }
   const T &front() const { return (*this)[0]; }
+  void swap(Vector<T> &) noexcept;
 
   T &operator[](std::size_t arg) { return m_entities[arg]; }
   const T &operator[](std::size_t arg) const { return m_entities[arg]; }
@@ -41,6 +42,10 @@ class Vector {
   T *begin() const { return &m_entities[0]; }
   T *end() { return &m_entities[m_size]; }
   T *end() const { return &m_entities[m_size]; }
+
+  friend void swap(Vector<T> &larg, Vector<T> &rarg) noexcept {
+    larg.swap(rarg);
+  }
 
  private:
   size_t compute_pow(const size_t &size) const;
@@ -102,6 +107,13 @@ void Vector<T>::push_back(const T &arg) {
 template <class T>
 void Vector<T>::pop_back() {
   --m_size;
+}
+
+template <class T>
+void Vector<T>::swap(Vector<T> &arg) noexcept {
+  auto temp(std::move(arg));
+  arg = std::move(*this);
+  *this = std::move(temp);
 }
 
 template <class T>

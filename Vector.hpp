@@ -144,8 +144,8 @@ Vector<T> &Vector<T>::operator=(Vector<T> &&arg) noexcept {
   if (&arg == this) return *this;
 
   m_entities = std::move(arg.m_entities);
-  m_size = arg.m_size;
-  m_real_size = arg.m_real_size;
+  m_size = std::move(arg.m_size);
+  m_real_size = std::move(arg.m_real_size);
 
   return *this;
 }

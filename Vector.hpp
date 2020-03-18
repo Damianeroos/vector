@@ -112,18 +112,10 @@ void Vector<T>::push_back(const T &arg) {
 
 template <class T>
 void Vector<T>::swap(Vector<T> &arg) noexcept {
-  Vector<T> temp;
-  temp.m_entities = std::move(arg.m_entities);
-  temp.m_size = std::move(arg.m_size);
-  temp.m_real_size = std::move(arg.m_real_size);
+  std::swap(m_entities,arg.m_entities);
+  std::swap(m_size,arg.m_size);
+  std::swap(m_real_size,arg.m_real_size);
 
-  arg.m_entities = std::move(m_entities);
-  arg.m_size = std::move(m_size);
-  arg.m_real_size = std::move(m_real_size);
-
-  m_entities = std::move(temp.m_entities);
-  m_size = std::move(temp.m_size);
-  m_real_size = std::move(temp.m_real_size);
 }
 
 template <class T>

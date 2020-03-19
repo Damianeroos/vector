@@ -165,3 +165,9 @@ template <class T>
 void swap(Vector<T> &larg, Vector<T> &rarg) noexcept {
   larg.swap(rarg);
 }
+
+// template <class Container>
+// void call_swap(Container &rhs,COntainer &lhs){
+//   using std::swap; // ADL
+//   swap(rhs,lhs);
+// }

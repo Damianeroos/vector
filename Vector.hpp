@@ -156,3 +156,19 @@ template <class T>
 void swap(Vector<T> &larg, Vector<T> &rarg) noexcept {
   larg.swap(rarg);
 }
+
+template <class Container>
+void call_swap(Container & lhs,Container & rhs){
+  invoke_fcn(&swap,&std::swap,lhs,rhs);
+}
+
+
+ template<typename F1, typename F2, typename Container>
+ auto invoke_fcn(F1 f1, F2 f2, Container && rhs, Container && lhs) -> decltype(f1(rhs,lhs)){
+   return f1(rhs,lhs);
+ }
+
+ template<typename F1, typename F2,typename Container>
+ auto invoke_fcn(F1 f1, F2 f2, Container && rhs, Container && lhs) -> decltype(f2(rhs,lhs)){
+   return f2(rhs,lhs);
+ }

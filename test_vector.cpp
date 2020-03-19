@@ -187,3 +187,21 @@ TEST(VectorTest, swap_fnc) {
   EXPECT_EQ(a.size(), 4);
   EXPECT_EQ(a[3], 6);
 }
+
+TEST(VectorTest, make_swap){
+  // Given
+  Vector<int> a = {1 , 2 ,3};
+  Vector<int> b = {88, 666, 1993,55};
+  std::vector<int> aa = {9,8,7};
+  std::vector<int> bb = {0 ,-4};
+
+  // When
+  call_swap(a, b);
+  call_swap(aa, bb);
+
+  // Them
+  EXPECT_EQ(a.size(),4);
+  EXPECT_EQ(b.back(),3);
+  EXPECT_EQ(aa.back(),-4);
+  EXPECT_EQ(bb.front(),9);
+}

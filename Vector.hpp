@@ -53,15 +53,9 @@ class Vector {
 template <class T>
 Vector<T>::Vector(const Vector<T> &arg) {
   size_t temp_real_size = 1 << compute_pow(arg.size());
-
   auto temp_entities = std::make_unique<T[]>(temp_real_size);
 
-  int i = 0;
-  for (auto it = arg.begin(); it != arg.end(); ++it) {
-    temp_entities[i] = std::move_if_noexcept(*it);
-    ++i;
-  }
-
+  std::copy(arg.begin(), arg.end(), &temp_entities[0]);
   m_entities = std::move(temp_entities);
   m_size = arg.size();
   m_real_size = temp_real_size;

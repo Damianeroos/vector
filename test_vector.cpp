@@ -61,15 +61,19 @@ TEST(VectorTest, at_function) {
   EXPECT_THROW(b.at(4), std::out_of_range);
 }
 
-TEST(VectorTest, elemAdding) {
+TEST(VectorTest, push_back) {
   // Given
-  Vector<int> c = {1, 2, 3};
+  Vector<int> c;
 
-  // When
-  c.push_back(99);
-
-  // Then
-  EXPECT_EQ(c.size(), 4);
+  // When/Then
+  EXPECT_EQ(c.size(), 0);
+  for (int i = 0; i < 100; ++i) {
+    c.push_back(i);
+  }
+  EXPECT_EQ(c.size(), 100);
+  for (int i = 0; i < 100; ++i) {
+    EXPECT_EQ(c[i], i);
+  }
 }
 
 TEST(VectorTest, back_function) {
